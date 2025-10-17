@@ -1,0 +1,6 @@
+pyproject.toml
+crawl4ai_mcp.egg-info/PKG-INFO
+crawl4ai_mcp.egg-info/SOURCES.txt
+crawl4ai_mcp.egg-info/dependency_links.txt
+crawl4ai_mcp.egg-info/requires.txt
+crawl4ai_mcp.egg-info/top_level.txt

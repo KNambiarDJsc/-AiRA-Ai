@@ -1,0 +1,14 @@
+Metadata-Version: 2.4
+Name: crawl4ai-mcp
+Version: 0.1.0
+Summary: MCP server for integrating web crawling and RAG into AI agents and AI coding assistants
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+Requires-Dist: crawl4ai==0.6.2
+Requires-Dist: mcp==1.7.1
+Requires-Dist: supabase==2.15.1
+Requires-Dist: openai==1.71.0
+Requires-Dist: dotenv==0.9.9
+Requires-Dist: sentence-transformers>=4.1.0
+Requires-Dist: redis==6.4.0
+Requires-Dist: rq==2.6.0
