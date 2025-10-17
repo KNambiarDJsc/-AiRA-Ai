@@ -250,3 +250,51 @@ async def smart_crawl_url_impl(url: str, max_depth: int = 3, max_concurrent: int
             "code_examples_stored": code_examples_count,
             "sources_updated": len(source_content_map)
         }
+
+def process_crawl_job(job_type: str, job_data: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Process a crawl job from the Redis queue.
+    
+    Args:
+        job_type: Type of job ('single_page' or 'smart_crawl')
+        job_data: Job parameters
+        
+    Returns:
+        Job result dictionary
+    """
+    try:
+        if job_type == "single_page":
+            result = asyncio.run(crawl_single_page_impl(job_data["url"]))
+        elif job_type == "smart_crawl":
+            result = asyncio.run(smart_crawl_url_impl(
+                url=job_data["url"],
+                max_depth=job_data.get("max_depth", 3),
+                max_concurrent=job_data.get("max_concurrent", 10),
+                chunk_size=job_data.get("chunk_size", 5000)
+            ))
+        else:
+            result = {"success": False, "error": f"Unknown job type: {job_type}"}
+        
+        return result
+        
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "job_type": job_type,
+            "url": job_data.get("url", "unknown")
+        }
+
+if __name__ == "__main__":
+    """
+    Run the worker process.
+    Usage: python crawl_worker.py
+    """
+    from rq import Worker
+    from redis_queue import redis_conn, crawl_queue
+    
+    print("Starting crawl worker...")
+    print(f"Listening to queue: {crawl_queue.name}")
+    
+    worker = Worker([crawl_queue], connection=redis_conn)
+    worker.work()
